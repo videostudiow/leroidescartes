@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* === Système de design néo-brutaliste (maquette Lovable) === */
+  /* Cream paper, ink black, crown-red, sun-yellow, neon-lime */
+  --ink: oklch(0.14 0.01 60);
+  --cream: oklch(0.96 0.02 85);
+  --paper: oklch(0.99 0.01 85);
+
+  --primary: oklch(0.58 0.22 25); /* crown red */
+  --primary-foreground: oklch(0.98 0.02 85);
+
+  --secondary: oklch(0.85 0.18 95); /* sun yellow */
+  --secondary-foreground: oklch(0.18 0.01 60);
+
+  --accent: oklch(0.78 0.22 140); /* neon lime */
+  --accent-foreground: oklch(0.18 0.01 60);
+
+  --muted: oklch(0.92 0.02 85);
+  --muted-foreground: oklch(0.42 0.02 60);
+
+  --border: oklch(0.18 0.01 60);
+
+  /* === Fonts === */
+  --font-display: var(--font-display-next), "Archivo Black", system-ui, sans-serif;
+  --font-sans: var(--font-sans-next), "Space Grotesk", system-ui, sans-serif;
+  --font-mono: var(--font-mono-next), "JetBrains Mono", ui-monospace, monospace;
+
+  /* === Alias legacy (compat composants existants : admin, collections…) === */
+  --color-background: var(--cream);
+  --color-text: var(--ink);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-dark: var(--ink);
+  --color-muted: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-heading: var(--font-display);
+  --font-body: var(--font-sans);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--ink);
+  font-family: var(--font-sans);
+  background-color: #e8dcc4;
+  background-image:
+    radial-gradient(ellipse at top, rgba(255, 240, 210, 0.6), transparent 60%),
+    radial-gradient(ellipse at bottom, rgba(180, 130, 90, 0.25), transparent 70%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+@layer base {
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  .font-display { font-family: var(--font-display); }
+  .font-mono { font-family: var(--font-mono); }
+}
+
+/* ===================================================================
+   Composants néo-brutalistes (portés depuis la maquette Lovable)
+   =================================================================== */
+
+.btn-chunk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1.4rem;
+  border: 2.5px solid var(--ink);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 5px 5px 0 0 var(--ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn-chunk:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 0 var(--ink); }
+.btn-chunk:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 var(--ink); }
+.btn-chunk.alt { background: var(--secondary); color: var(--ink); }
+.btn-chunk.ghost { background: var(--paper); color: var(--ink); }
+.btn-chunk.lime { background: var(--accent); color: var(--ink); }
+
+.brutal-card {
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  box-shadow: 6px 6px 0 0 var(--ink);
+  border-radius: 14px;
+}
+.brutal-card-hover { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.brutal-card-hover:hover { transform: translate(-3px, -3px); box-shadow: 10px 10px 0 0 var(--ink); }
+
+.tape {
+  background: var(--secondary);
+  color: var(--ink);
+  border-top: 2.5px solid var(--ink);
+  border-bottom: 2.5px solid var(--ink);
+}
+
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  background: var(--accent);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+.sticker.red { background: var(--primary); color: var(--primary-foreground); }
+.sticker.yellow { background: var(--secondary); color: var(--ink); }
+
+.marquee {
+  display: flex;
+  gap: 3rem;
+  animation: marquee 28s linear infinite;
+  white-space: nowrap;
+  will-change: transform;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.tilt-l { transform: rotate(-4deg); }
+.tilt-r { transform: rotate(4deg); }
+.tilt-xs-l { transform: rotate(-1.5deg); }
+.tilt-xs-r { transform: rotate(1.5deg); }
+
+.grid-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+/* ===================================================================
+   Classes utilitaires legacy (admin, collections, panier…)
+   =================================================================== */
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold uppercase tracking-widest rounded-sm;
+  }
+  .badge-primary { @apply badge bg-primary text-white; }
+  .badge-secondary { @apply badge bg-secondary text-dark; }
+  .badge-live { @apply badge bg-accent text-dark; }
+  .badge-outline { @apply badge border border-current; }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-wide text-sm transition-all duration-150 cursor-pointer;
+  }
+  .btn-primary { @apply btn bg-primary text-white hover:opacity-90 active:scale-95; }
+  .btn-secondary { @apply btn bg-secondary text-dark hover:opacity-90 active:scale-95; }
+  .btn-outline { @apply btn border-2 border-current hover:bg-current hover:text-background active:scale-95; }
+  .btn-dark { @apply btn bg-dark text-white hover:opacity-90 active:scale-95; }
+
+  .section-badge {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3;
+  }
+
+  .ticker-wrapper { overflow: hidden; white-space: nowrap; }
+  .ticker-inner { display: inline-flex; animation: ticker 40s linear infinite; will-change: transform; }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .admin-nav-item {
+    @apply flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors duration-150;
+  }
+  .admin-nav-item:hover { @apply bg-zinc-800 text-white; }
+  .admin-nav-item.active { @apply bg-primary text-white; }
+}

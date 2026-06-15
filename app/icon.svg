@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Carte de jeu stylisée avec couronne -->
+  <rect width="32" height="32" rx="4" fill="#E53935"/>
+  <rect x="4" y="5" width="24" height="22" rx="2" fill="#F5C52B"/>
+  <rect x="6" y="7" width="20" height="18" rx="1.5" fill="#0F0F0F"/>
+  <!-- Couronne / étoile centrale -->
+  <path d="M16 10 L17.5 14 L22 14 L18.5 16.5 L20 21 L16 18.5 L12 21 L13.5 16.5 L10 14 L14.5 14 Z" fill="#F5C52B"/>
+</svg>
