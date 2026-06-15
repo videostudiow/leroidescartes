@@ -65,15 +65,15 @@ function Hero({ dict, img }: { dict: Dictionary; img: HomeImages }) {
     <section className="relative overflow-hidden border-b-2 border-[color:var(--ink)] grid-noise">
       <div className="mx-auto max-w-7xl px-4 pt-10 pb-14 lg:pt-20 lg:pb-28 grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         <div className="lg:col-span-7 relative z-10">
-          <div className="flex flex-wrap gap-2 mb-5">
+          <div className="hidden sm:flex flex-wrap gap-2 mb-5">
             <span className="sticker red"><Flame className="size-3" /> {h.stickerNouveautes}</span>
             <span className="sticker yellow"><Zap className="size-3" /> {h.stickerBreakouts}</span>
             <span className="sticker"><Star className="size-3" /> {h.stickerAvis}</span>
           </div>
 
-          <h1 className="font-display text-[clamp(2.2rem,8vw,5.6rem)] leading-[0.92] uppercase">
+          <h1 className="font-display text-[clamp(1.7rem,7vw,5.6rem)] leading-[0.92] uppercase break-words hyphens-auto">
             {h.heroTitre1} <br />
-            <span className="inline-block bg-[color:var(--primary)] text-[color:var(--primary-foreground)] px-3 py-1 -rotate-1 border-2 border-[color:var(--ink)] shadow-[4px_4px_0_0_var(--ink)] my-2">
+            <span className="inline-block max-w-full bg-[color:var(--primary)] text-[color:var(--primary-foreground)] px-3 py-1 -rotate-1 border-2 border-[color:var(--ink)] shadow-[4px_4px_0_0_var(--ink)] my-2">
               {h.heroTitre2}
             </span><br />
             {h.heroTitre3}
