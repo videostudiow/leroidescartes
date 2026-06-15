@@ -81,6 +81,28 @@ export const defaultContent: Record<string, string> = {
   hero_image_url: "",
   logo_url:
     "https://leroidescartes.ca/cdn/shop/files/LeRoiDesCartes_LOGO.png?v=1745604164",
+
+  // Images de la page d'accueil (éditables dans /admin/images)
+  home_img_hero_1:
+    "https://leroidescartes.ca/cdn/shop/files/s-l1200_5_7d5d6037-31f9-48f2-869e-f12a090e6850.jpg?v=1770339338&width=1200",
+  home_img_hero_2:
+    "https://leroidescartes.ca/cdn/shop/files/MagicSuperheroespromo_1.png?v=1778532585&width=1500",
+  home_img_hero_3:
+    "https://leroidescartes.ca/cdn/shop/files/Unleashedpromo.png?v=1778532501&width=1500",
+  home_img_cat_sports:
+    "https://leroidescartes.ca/cdn/shop/files/images_1_1.jpg?v=1770339429&width=1200",
+  home_img_cat_jeux:
+    "https://leroidescartes.ca/cdn/shop/files/MagicSuperheroespromo_1.png?v=1778532585&width=1500",
+  home_img_cat_anime:
+    "https://leroidescartes.ca/cdn/shop/files/Sans_titre_1170_x_800_px_2.png?v=1779726946&width=1500",
+  home_img_cat_vetements:
+    "https://leroidescartes.ca/cdn/shop/files/Nouveau_projet_5.png?v=1773099815&width=1200",
+  home_img_cat_accessoires:
+    "https://leroidescartes.ca/cdn/shop/files/s-l1200_5_7d5d6037-31f9-48f2-869e-f12a090e6850.jpg?v=1770339338&width=1200",
+  home_img_cat_consommables:
+    "https://leroidescartes.ca/cdn/shop/files/Unleashedpromo.png?v=1778532501&width=1500",
+  home_img_break:
+    "https://leroidescartes.ca/cdn/shop/files/images_1_1.jpg?v=1770339429&width=1200",
 };
 
 export const defaultSiteInfo: Record<string, string> = {

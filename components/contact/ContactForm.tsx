@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Loader2, Check, AlertCircle } from "lucide-react";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 interface FormState {
   nom: string;
@@ -11,7 +12,8 @@ interface FormState {
   honeypot: string;
 }
 
-export default function ContactForm() {
+export default function ContactForm({ dict }: { dict: Dictionary }) {
+  const t = dict.contact.form;
   const [form, setForm] = useState<FormState>({
     nom: "",
     email: "",
@@ -63,13 +65,13 @@ export default function ContactForm() {
         <div className="w-14 h-14 bg-accent text-dark rounded-full flex items-center justify-center mx-auto mb-4">
           <Check size={28} />
         </div>
-        <p className="font-heading font-black text-2xl uppercase mb-2">Message envoyé !</p>
-        <p className="text-muted">On vous répond en moins de 24h. Merci de votre message.</p>
+        <p className="font-heading font-black text-2xl uppercase mb-2">{t.succes}</p>
+        <p className="text-muted">{dict.contact.repondViteDesc}</p>
         <button
           onClick={() => setStatus("idle")}
           className="btn-outline border-dark text-dark text-sm px-6 py-2 mt-6"
         >
-          Envoyer un autre message
+          {t.envoyer}
         </button>
       </div>
     );
@@ -92,7 +94,7 @@ export default function ContactForm() {
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
           <label htmlFor="nom" className="block text-sm font-bold uppercase tracking-wide mb-1.5">
-            Nom <span className="text-primary">*</span>
+            {t.nom} <span className="text-primary">*</span>
           </label>
           <input
             id="nom"
@@ -101,14 +103,14 @@ export default function ContactForm() {
             required
             value={form.nom}
             onChange={handleChange}
-            placeholder="Votre nom"
+            placeholder={t.nom}
             className="w-full px-4 py-3 bg-white border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm transition-colors"
             autoComplete="name"
           />
         </div>
         <div>
           <label htmlFor="email" className="block text-sm font-bold uppercase tracking-wide mb-1.5">
-            Courriel <span className="text-primary">*</span>
+            {t.email} <span className="text-primary">*</span>
           </label>
           <input
             id="email"
@@ -126,7 +128,7 @@ export default function ContactForm() {
 
       <div>
         <label htmlFor="telephone" className="block text-sm font-bold uppercase tracking-wide mb-1.5">
-          Téléphone <span className="text-muted text-xs font-normal normal-case">(optionnel)</span>
+          {t.telephone}
         </label>
         <input
           id="telephone"
@@ -142,7 +144,7 @@ export default function ContactForm() {
 
       <div>
         <label htmlFor="message" className="block text-sm font-bold uppercase tracking-wide mb-1.5">
-          Message <span className="text-primary">*</span>
+          {t.message} <span className="text-primary">*</span>
         </label>
         <textarea
           id="message"
@@ -151,24 +153,17 @@ export default function ContactForm() {
           rows={5}
           value={form.message}
           onChange={handleChange}
-          placeholder="Votre question, évaluation de carte, demande spéciale..."
+          placeholder={t.message}
           className="w-full px-4 py-3 bg-white border border-border rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-sm transition-colors resize-none"
         />
       </div>
 
-      <p className="text-xs text-muted">
-        En soumettant ce formulaire, vous acceptez que vos données soient utilisées pour vous
-        répondre conformément à notre{" "}
-        <a href="/politique-de-confidentialite" className="underline hover:text-primary">
-          politique de confidentialité
-        </a>
-        .
-      </p>
+      <p className="text-xs text-muted">{t.consentement}</p>
 
       {status === "error" && (
         <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
           <AlertCircle size={16} />
-          <span>{errorMsg || "Une erreur est survenue. Veuillez réessayer."}</span>
+          <span>{errorMsg || t.erreur}</span>
         </div>
       )}
 
@@ -180,10 +175,10 @@ export default function ContactForm() {
         {status === "loading" ? (
           <span className="flex items-center justify-center gap-2">
             <Loader2 size={16} className="animate-spin" />
-            Envoi en cours...
+            {t.envoi}
           </span>
         ) : (
-          "Envoyer le message →"
+          `${t.envoyer} →`
         )}
       </button>
     </form>

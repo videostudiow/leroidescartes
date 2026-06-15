@@ -1,0 +1,25 @@
+# Images manquantes — Le Roi Des Cartes
+
+Les images suivantes sont en placeholder (placehold.co) et devront être
+remplacées par les vraies images avant le lancement.
+
+## À fournir par le client
+- Hero image (accueil) : photo boutique ou produits phares — 1920×1080px WebP
+- Image OG (/public/images/og-image.jpg) : 1200×630px
+- Photos boutique physique pour /a-propos
+- Logos officiels des partenaires (Topps, Panini, Upper Deck, Fanatics, etc.)
+- Photos catégories (Pokémon, Magic, Riftbound, NHL, Funko Pop, Sleeves)
+
+## Logos partenaires disponibles
+- Topps, Panini, O-Pee-Chee, Konami, Upper Deck, Fanatics, Score
+- Remplacer les placeholders dans: components/sections/PartnersSection.tsx
+
+## Images Shopify
+- Les images des produits et collections viennent automatiquement
+  de Shopify via la Storefront API une fois configurée.
+  Aucune action requise de notre côté.
+
+## Hero vidéo
+- URL vidéo disponible (scraper):
+  https://leroidescartes.ca/cdn/shop/videos/c/vp/59f0dc0292d945ce9ab018b6f9b7cba3/...
+- Peut être intégrée dans HeroSection.tsx en remplacement/complément du fond image.

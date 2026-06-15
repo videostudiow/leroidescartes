@@ -3,9 +3,18 @@ import type {
   ShopifyCollection,
   ShopifyProduct,
 } from "./types";
+import type { ShopContext } from "./shop-context";
 
 const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!;
 const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN!;
+
+// Variables @inContext communes (langue + pays) injectées dans les lectures.
+const CTX_ARGS = "$country: CountryCode, $language: LanguageCode";
+const CTX_DIR = "@inContext(country: $country, language: $language)";
+
+function ctxVars(ctx?: ShopContext) {
+  return ctx ? { country: ctx.country, language: ctx.language } : {};
+}
 
 async function shopifyFetch<T>({
   query,
@@ -83,12 +92,13 @@ const PRODUCT_FRAGMENT = `
 
 // ── Collections ────────────────────────────────────────────────────────────
 
-export async function getAllCollections(): Promise<ShopifyCollection[]> {
+export async function getAllCollections(ctx?: ShopContext): Promise<ShopifyCollection[]> {
   const data = await shopifyFetch<{
     collections: { edges: Array<{ node: ShopifyCollection }> };
   }>({
+    variables: ctxVars(ctx),
     query: `
-      query AllCollections {
+      query AllCollections(${CTX_ARGS}) ${CTX_DIR} {
         collections(first: 50, sortKey: TITLE) {
           edges {
             node {
@@ -112,11 +122,12 @@ export async function getAllCollections(): Promise<ShopifyCollection[]> {
 }
 
 export async function getCollectionByHandle(
-  handle: string
+  handle: string,
+  ctx?: ShopContext
 ): Promise<ShopifyCollection | null> {
   const data = await shopifyFetch<{ collection: ShopifyCollection | null }>({
     query: `
-      query CollectionByHandle($handle: String!, $first: Int!, $after: String) {
+      query CollectionByHandle($handle: String!, $first: Int!, $after: String, ${CTX_ARGS}) ${CTX_DIR} {
         collection(handle: $handle) {
           id
           handle
@@ -131,7 +142,7 @@ export async function getCollectionByHandle(
       }
       ${PRODUCT_FRAGMENT}
     `,
-    variables: { handle, first: 24, after: null },
+    variables: { handle, first: 24, after: null, ...ctxVars(ctx) },
   });
 
   return data.collection;
@@ -140,11 +151,12 @@ export async function getCollectionByHandle(
 export async function getProductsByCollection(
   handle: string,
   first = 24,
-  after: string | null = null
+  after: string | null = null,
+  ctx?: ShopContext
 ): Promise<{ products: ShopifyProduct[]; pageInfo: ShopifyCollection["products"]["pageInfo"] }> {
   const data = await shopifyFetch<{ collection: ShopifyCollection | null }>({
     query: `
-      query ProductsByCollection($handle: String!, $first: Int!, $after: String) {
+      query ProductsByCollection($handle: String!, $first: Int!, $after: String, ${CTX_ARGS}) ${CTX_DIR} {
         collection(handle: $handle) {
           products(first: $first, after: $after) {
             edges { node { ...ProductFragment } }
@@ -154,7 +166,7 @@ export async function getProductsByCollection(
       }
       ${PRODUCT_FRAGMENT}
     `,
-    variables: { handle, first, after },
+    variables: { handle, first, after, ...ctxVars(ctx) },
   });
 
   if (!data.collection) return { products: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: "", endCursor: "" } };
@@ -167,36 +179,37 @@ export async function getProductsByCollection(
 // ── Products ───────────────────────────────────────────────────────────────
 
 export async function getProductByHandle(
-  handle: string
+  handle: string,
+  ctx?: ShopContext
 ): Promise<ShopifyProduct | null> {
   const data = await shopifyFetch<{ product: ShopifyProduct | null }>({
     query: `
-      query ProductByHandle($handle: String!) {
+      query ProductByHandle($handle: String!, ${CTX_ARGS}) ${CTX_DIR} {
         product(handle: $handle) {
           ...ProductFragment
         }
       }
       ${PRODUCT_FRAGMENT}
     `,
-    variables: { handle },
+    variables: { handle, ...ctxVars(ctx) },
   });
 
   return data.product;
 }
 
-export async function getFeaturedProducts(first = 8): Promise<ShopifyProduct[]> {
+export async function getFeaturedProducts(first = 8, ctx?: ShopContext): Promise<ShopifyProduct[]> {
   const data = await shopifyFetch<{
     products: { edges: Array<{ node: ShopifyProduct }> };
   }>({
     query: `
-      query FeaturedProducts($first: Int!) {
+      query FeaturedProducts($first: Int!, ${CTX_ARGS}) ${CTX_DIR} {
         products(first: $first, sortKey: BEST_SELLING) {
           edges { node { ...ProductFragment } }
         }
       }
       ${PRODUCT_FRAGMENT}
     `,
-    variables: { first },
+    variables: { first, ...ctxVars(ctx) },
   });
 
   return data.products.edges.map((e) => e.node);
@@ -332,8 +345,12 @@ export async function removeCartLines(
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-export function formatPrice(amount: string, currencyCode = "CAD"): string {
-  return new Intl.NumberFormat("fr-CA", {
+export function formatPrice(
+  amount: string,
+  currencyCode = "CAD",
+  locale: "fr" | "en" = "fr"
+): string {
+  return new Intl.NumberFormat(locale === "en" ? "en-CA" : "fr-CA", {
     style: "currency",
     currency: currencyCode,
   }).format(parseFloat(amount));

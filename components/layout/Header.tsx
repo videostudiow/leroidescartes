@@ -1,94 +1,101 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { useState, useEffect } from "react";
 import { MapPin, ShoppingBag, ChevronDown } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
+import LangCurrencySwitcher from "@/components/i18n/LangCurrencySwitcher";
 
-type SubLink = { label: string; href: string };
-type NavLink = { label: string; href: string; children?: SubLink[] };
+type SubLink = { key: string; href: string };
+type NavLink = { key: keyof Dictionary["nav"]; href: string; children?: SubLink[] };
 
-const NAV_LINKS: NavLink[] = [
+const NAV: NavLink[] = [
   {
-    label: "Sports",
+    key: "sports",
     href: "/collections/sports",
     children: [
-      { label: "Pre-Order", href: "/collections/pre-order" },
-      { label: "Hockey", href: "/collections/hockey" },
-      { label: "Football", href: "/collections/football" },
-      { label: "Baseball", href: "/collections/baseball" },
-      { label: "Basketball", href: "/collections/basketball" },
-      { label: "Soccer", href: "/collections/soccer" },
-      { label: "Autres sports", href: "/collections/autres-sports" },
+      { key: "pre-order", href: "/collections/pre-order" },
+      { key: "hockey", href: "/collections/hockey" },
+      { key: "football", href: "/collections/football" },
+      { key: "baseball", href: "/collections/baseball" },
+      { key: "basketball", href: "/collections/basketball" },
+      { key: "soccer", href: "/collections/soccer" },
+      { key: "autres-sports", href: "/collections/autres-sports" },
     ],
   },
   {
-    label: "JEUX",
+    key: "jeux",
     href: "/collections/tcg-tout",
     children: [
-      { label: "Pokémon", href: "/collections/pokemon" },
-      { label: "Magic The Gathering", href: "/collections/magic-the-gathering" },
-      { label: "Yu-Gi-Oh!", href: "/collections/yu-gi-oh" },
-      { label: "Digimon", href: "/collections/digimon" },
-      { label: "One Piece", href: "/collections/one-piece" },
-      { label: "Flesh & Blood", href: "/collections/flesh-and-blood" },
-      { label: "Lorcana", href: "/collections/lorcana" },
-      { label: "Riftbound", href: "/collections/riftbound" },
-      { label: "Union Arena", href: "/collections/union-arena" },
-      { label: "Final Fantasy", href: "/collections/final-fantasy" },
-      { label: "Star Wars & Marvel", href: "/collections/star-wars-marvel" },
-      { label: "Dragonball", href: "/collections/dragonball" },
-      { label: "Disney", href: "/collections/disney" },
+      { key: "pokemon", href: "/collections/pokemon" },
+      { key: "magic-the-gathering", href: "/collections/magic-the-gathering" },
+      { key: "yu-gi-oh", href: "/collections/yu-gi-oh" },
+      { key: "digimon", href: "/collections/digimon" },
+      { key: "one-piece", href: "/collections/one-piece" },
+      { key: "flesh-and-blood", href: "/collections/flesh-and-blood" },
+      { key: "lorcana", href: "/collections/lorcana" },
+      { key: "riftbound", href: "/collections/riftbound" },
+      { key: "union-arena", href: "/collections/union-arena" },
+      { key: "final-fantasy", href: "/collections/final-fantasy" },
+      { key: "star-wars-marvel", href: "/collections/star-wars-marvel" },
+      { key: "dragonball", href: "/collections/dragonball" },
+      { key: "disney", href: "/collections/disney" },
     ],
   },
   {
-    label: "Anime",
+    key: "anime",
     href: "/collections/anime",
     children: [
-      { label: "One Piece", href: "/collections/one-piece" },
-      { label: "Dragon Ball", href: "/collections/dragonball" },
-      { label: "Yu-Gi-Oh!", href: "/collections/yu-gi-oh" },
-      { label: "Digimon", href: "/collections/digimon" },
+      { key: "one-piece", href: "/collections/one-piece" },
+      { key: "dragonball", href: "/collections/dragonball" },
+      { key: "yu-gi-oh", href: "/collections/yu-gi-oh" },
+      { key: "digimon", href: "/collections/digimon" },
     ],
   },
   {
-    label: "Vêtements",
+    key: "vetements",
     href: "/collections/vetements-de-sports",
     children: [
-      { label: "Jersey", href: "/collections/jersey" },
-      { label: "T-Shirts", href: "/collections/t-shirts" },
-      { label: "Casquettes", href: "/collections/casquettes" },
-      { label: "Hoodies", href: "/collections/hoodies" },
+      { key: "jersey", href: "/collections/jersey" },
+      { key: "t-shirts", href: "/collections/t-shirts" },
+      { key: "casquettes", href: "/collections/casquettes" },
+      { key: "hoodies", href: "/collections/hoodies" },
     ],
   },
   {
-    label: "Accessoires",
+    key: "accessoires",
     href: "/collections/accessoires",
     children: [
-      { label: "Playmats", href: "/collections/playmats" },
-      { label: "Sleeves", href: "/collections/sleeves" },
-      { label: "Boites", href: "/collections/boites" },
-      { label: "Deckbox", href: "/collections/deckbox" },
-      { label: "Cartes-Cadeaux", href: "/collections/carte-cadeau" },
+      { key: "playmats", href: "/collections/playmats" },
+      { key: "sleeves", href: "/collections/sleeves" },
+      { key: "boites", href: "/collections/boites" },
+      { key: "deckbox", href: "/collections/deckbox" },
+      { key: "carte-cadeau", href: "/collections/carte-cadeau" },
     ],
   },
   {
-    label: "Consommables",
+    key: "consommables",
     href: "/collections/consommables",
     children: [
-      { label: "Boissons", href: "/collections/boissons" },
-      { label: "Nourritures", href: "/collections/nourritures" },
+      { key: "boissons", href: "/collections/boissons" },
+      { key: "nourritures", href: "/collections/nourritures" },
     ],
   },
-  { label: "Collections", href: "/collections" },
-  { label: "Contact", href: "/contact" },
+  { key: "collections", href: "/collections" },
+  { key: "contact", href: "/contact" },
 ];
+
+const LOGO =
+  "https://leroidescartes.ca/cdn/shop/files/LeRoiDesCartes_LOGO.png?v=1745604164";
 
 interface HeaderProps {
   siteInfo: Record<string, string>;
+  dict: Dictionary;
+  currency: string;
 }
 
-export default function Header({ siteInfo }: HeaderProps) {
+export default function Header({ siteInfo, dict, currency }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobile, setOpenMobile] = useState<string | null>(null);
@@ -105,7 +112,7 @@ export default function Header({ siteInfo }: HeaderProps) {
       {/* Top bar */}
       <div className="bg-[color:var(--ink)] text-[color:var(--cream)] text-xs relative z-50">
         <div className="mx-auto max-w-7xl px-4 py-1.5 flex items-center justify-between font-mono gap-2">
-          <span className="truncate">🚚 Livraison GRATUITE au Canada à partir de 250 $</span>
+          <span className="truncate">🚚 {dict.topbar.livraison}</span>
           <span className="hidden sm:flex items-center gap-1.5 shrink-0">
             <MapPin className="size-3" /> {siteInfo.adresse ?? "347 Rue Duvernay, Beloeil QC"}
           </span>
@@ -117,48 +124,42 @@ export default function Header({ siteInfo }: HeaderProps) {
 
         {/* === DESKTOP === */}
         <div className="hidden lg:flex mx-auto max-w-7xl px-4 py-3 items-center gap-4">
-          <Link href="/" aria-label="Le Roi Des Cartes — Accueil">
+          <Link href="/" aria-label={`Le Roi Des Cartes — ${dict.nav.home}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://leroidescartes.ca/cdn/shop/files/LeRoiDesCartes_LOGO.png?v=1745604164"
-              alt="Le Roi Des Cartes"
-              className="h-10 w-auto object-contain"
-            />
+            <img src={LOGO} alt="Le Roi Des Cartes" className="h-10 w-auto object-contain" />
           </Link>
 
           <nav className="flex items-center flex-nowrap gap-0.5 ml-2 text-sm font-semibold">
-            {NAV_LINKS.map((l) => (
+            {NAV.map((l) => (
               <div
-                key={l.label}
+                key={l.key}
                 className="relative"
-                onMouseEnter={() => l.children && setOpenDropdown(l.label)}
+                onMouseEnter={() => l.children && setOpenDropdown(l.key)}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
                 <Link
                   href={l.href}
                   className="inline-flex items-center gap-1 px-2 py-1.5 rounded-md hover:bg-[color:var(--ink)] hover:text-[color:var(--cream)] transition whitespace-nowrap"
                 >
-                  {l.label}
+                  {dict.nav[l.key]}
                   {l.children && (
                     <ChevronDown
-                      className={`size-3 transition-transform duration-200 ${openDropdown === l.label ? "rotate-180" : ""}`}
+                      className={`size-3 transition-transform duration-200 ${openDropdown === l.key ? "rotate-180" : ""}`}
                     />
                   )}
                 </Link>
 
-                {l.children && openDropdown === l.label && (
-                  /* pt-2 crée un pont invisible entre le lien et le panel —
-                     la souris reste dans le div parent et ne ferme pas le menu */
+                {l.children && openDropdown === l.key && (
                   <div className="absolute top-full left-0 z-50 pt-2">
                     <div className="min-w-[200px] bg-[color:var(--cream)] border-2 border-[color:var(--ink)] rounded-md shadow-[4px_4px_0_0_var(--ink)] overflow-hidden">
                       {l.children.map((sub) => (
                         <Link
-                          key={sub.label}
+                          key={sub.key + sub.href}
                           href={sub.href}
                           onClick={() => setOpenDropdown(null)}
                           className="block px-4 py-2.5 text-sm font-mono hover:bg-[color:var(--ink)] hover:text-[color:var(--cream)] transition whitespace-nowrap border-b border-[color:var(--ink)]/10 last:border-0"
                         >
-                          {sub.label}
+                          {dict.subnav[sub.key] ?? sub.key}
                         </Link>
                       ))}
                     </div>
@@ -169,10 +170,11 @@ export default function Header({ siteInfo }: HeaderProps) {
           </nav>
 
           <div className="ml-auto flex items-center gap-2 shrink-0">
+            <LangCurrencySwitcher currency={currency} variant="header" />
             <button
               onClick={openCart}
               className="relative inline-flex items-center justify-center size-10 border-2 border-[color:var(--ink)] rounded-md bg-[color:var(--paper)] shadow-[3px_3px_0_0_var(--ink)] hover:-translate-x-px hover:-translate-y-px transition"
-              aria-label={`Ouvrir le panier${totalQty > 0 ? ` (${totalQty} articles)` : ""}`}
+              aria-label={dict.nav.cart}
             >
               <ShoppingBag className="size-5" />
               {totalQty > 0 && (
@@ -184,13 +186,12 @@ export default function Header({ siteInfo }: HeaderProps) {
           </div>
         </div>
 
-        {/* === MOBILE === logo centré + hamburger */}
+        {/* === MOBILE === */}
         <div className="lg:hidden px-4 py-3 flex items-center justify-between">
-          {/* Panier à gauche */}
           <button
             onClick={openCart}
             className="relative inline-flex items-center justify-center size-10 border-2 border-[color:var(--ink)] rounded-md bg-[color:var(--paper)] shadow-[3px_3px_0_0_var(--ink)]"
-            aria-label={`Ouvrir le panier${totalQty > 0 ? ` (${totalQty} articles)` : ""}`}
+            aria-label={dict.nav.cart}
           >
             <ShoppingBag className="size-5" />
             {totalQty > 0 && (
@@ -200,36 +201,21 @@ export default function Header({ siteInfo }: HeaderProps) {
             )}
           </button>
 
-          {/* Logo centré */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2" aria-label="Le Roi Des Cartes — Accueil">
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2" aria-label={`Le Roi Des Cartes — ${dict.nav.home}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://leroidescartes.ca/cdn/shop/files/LeRoiDesCartes_LOGO.png?v=1745604164"
-              alt="Le Roi Des Cartes"
-              className="h-10 w-auto object-contain"
-            />
+            <img src={LOGO} alt="Le Roi Des Cartes" className="h-10 w-auto object-contain" />
           </Link>
 
-          {/* Hamburger à droite avec animation */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="relative inline-flex items-center justify-center size-10 border-2 border-[color:var(--ink)] rounded-md bg-[color:var(--paper)] shadow-[3px_3px_0_0_var(--ink)] shrink-0"
-            aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.openMenu}
             aria-expanded={menuOpen}
           >
             <span className="flex flex-col gap-[5px] w-5">
-              <span
-                className="block h-[2.5px] bg-[color:var(--ink)] rounded-full origin-center transition-all duration-300"
-                style={{ transform: menuOpen ? "translateY(7.5px) rotate(45deg)" : "none" }}
-              />
-              <span
-                className="block h-[2.5px] bg-[color:var(--ink)] rounded-full transition-all duration-200"
-                style={{ opacity: menuOpen ? 0 : 1, transform: menuOpen ? "scaleX(0)" : "scaleX(1)" }}
-              />
-              <span
-                className="block h-[2.5px] bg-[color:var(--ink)] rounded-full origin-center transition-all duration-300"
-                style={{ transform: menuOpen ? "translateY(-7.5px) rotate(-45deg)" : "none" }}
-              />
+              <span className="block h-[2.5px] bg-[color:var(--ink)] rounded-full origin-center transition-all duration-300" style={{ transform: menuOpen ? "translateY(7.5px) rotate(45deg)" : "none" }} />
+              <span className="block h-[2.5px] bg-[color:var(--ink)] rounded-full transition-all duration-200" style={{ opacity: menuOpen ? 0 : 1, transform: menuOpen ? "scaleX(0)" : "scaleX(1)" }} />
+              <span className="block h-[2.5px] bg-[color:var(--ink)] rounded-full origin-center transition-all duration-300" style={{ transform: menuOpen ? "translateY(-7.5px) rotate(-45deg)" : "none" }} />
             </span>
           </button>
         </div>
@@ -241,20 +227,15 @@ export default function Header({ siteInfo }: HeaderProps) {
           menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* En-tête overlay */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b-2 border-[color:var(--cream)]/20">
           <Link href="/" onClick={() => setMenuOpen(false)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://leroidescartes.ca/cdn/shop/files/LeRoiDesCartes_LOGO.png?v=1745604164"
-              alt="Le Roi Des Cartes"
-              className="h-12 w-auto object-contain"
-            />
+            <img src={LOGO} alt="Le Roi Des Cartes" className="h-12 w-auto object-contain" />
           </Link>
           <button
             onClick={() => setMenuOpen(false)}
             className="inline-flex items-center justify-center size-10 border-2 border-[color:var(--cream)] rounded-md"
-            aria-label="Fermer le menu"
+            aria-label={dict.nav.closeMenu}
           >
             <span className="flex flex-col gap-[5px] w-5">
               <span className="block h-[2.5px] bg-[color:var(--cream)] rounded-full origin-center" style={{ transform: "translateY(7.5px) rotate(45deg)" }} />
@@ -264,15 +245,12 @@ export default function Header({ siteInfo }: HeaderProps) {
           </button>
         </div>
 
-        {/* Liens de navigation avec accordéon */}
         <nav className="flex-1 overflow-y-auto px-6 py-4">
-          {NAV_LINKS.map((l, i) => (
-            <div key={l.label} className="border-b border-[color:var(--cream)]/15">
-
-              {/* Ligne principale — toute la ligne clique pour ouvrir l'accordéon si enfants */}
+          {NAV.map((l, i) => (
+            <div key={l.key} className="border-b border-[color:var(--cream)]/15">
               {l.children ? (
                 <button
-                  onClick={() => setOpenMobile(openMobile === l.label ? null : l.label)}
+                  onClick={() => setOpenMobile(openMobile === l.key ? null : l.key)}
                   className="w-full flex items-center justify-between py-4 transition-all duration-200 text-left"
                   style={{
                     transitionDelay: menuOpen ? `${i * 40}ms` : "0ms",
@@ -281,10 +259,10 @@ export default function Header({ siteInfo }: HeaderProps) {
                   }}
                 >
                   <span className="font-display text-[clamp(1.6rem,6vw,2.8rem)] uppercase text-[color:var(--cream)] leading-none">
-                    {l.label}
+                    {dict.nav[l.key]}
                   </span>
                   <ChevronDown
-                    className={`size-6 text-[color:var(--cream)]/60 transition-transform duration-300 shrink-0 ml-3 ${openMobile === l.label ? "rotate-180 text-[color:var(--primary)]" : ""}`}
+                    className={`size-6 text-[color:var(--cream)]/60 transition-transform duration-300 shrink-0 ml-3 ${openMobile === l.key ? "rotate-180 text-[color:var(--primary)]" : ""}`}
                   />
                 </button>
               ) : (
@@ -299,37 +277,35 @@ export default function Header({ siteInfo }: HeaderProps) {
                   }}
                 >
                   <span className="font-display text-[clamp(1.6rem,6vw,2.8rem)] uppercase text-[color:var(--cream)] group-hover:text-[color:var(--primary)] transition-colors leading-none">
-                    {l.label}
+                    {dict.nav[l.key]}
                   </span>
                   <span className="text-[color:var(--cream)]/30 group-hover:text-[color:var(--primary)] transition-colors text-2xl">↗</span>
                 </Link>
               )}
 
-              {/* Panel accordéon */}
               {l.children && (
                 <div
                   className="overflow-hidden transition-all duration-300 ease-in-out"
-                  style={{ maxHeight: openMobile === l.label ? "600px" : "0px" }}
+                  style={{ maxHeight: openMobile === l.key ? "600px" : "0px" }}
                 >
-                  {/* Lien "Voir tout" */}
                   <Link
                     href={l.href}
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2 mb-2 font-mono text-xs text-[color:var(--primary)] hover:underline"
                   >
-                    Voir tout — {l.label} ↗
+                    {dict.nav.voirTout} — {dict.nav[l.key]} ↗
                   </Link>
                   <div className="pb-4 grid grid-cols-2 gap-x-3 gap-y-0">
                     {l.children.map((sub) => (
                       <Link
-                        key={sub.label}
+                        key={sub.key + sub.href}
                         href={sub.href}
                         onClick={() => setMenuOpen(false)}
                         className="flex items-center gap-1.5 font-mono text-sm text-[color:var(--cream)] hover:text-[color:var(--primary)] transition-colors py-2 border-b border-white/10 last:border-0"
                         style={{ opacity: 0.8 }}
                       >
                         <span style={{ opacity: 0.4 }} className="text-xs">›</span>
-                        {sub.label}
+                        {dict.subnav[sub.key] ?? sub.key}
                       </Link>
                     ))}
                   </div>
@@ -339,14 +315,14 @@ export default function Header({ siteInfo }: HeaderProps) {
           ))}
         </nav>
 
-        {/* Footer du menu */}
         <div className="px-6 pb-8 pt-4 space-y-3">
+          <LangCurrencySwitcher currency={currency} variant="footer" onNavigate={() => setMenuOpen(false)} />
           <Link
             href="/collections"
             onClick={() => setMenuOpen(false)}
             className="btn-chunk w-full justify-center"
           >
-            <ShoppingBag className="size-4" /> Boutique en ligne
+            <ShoppingBag className="size-4" /> {dict.nav.boutique}
           </Link>
           <p className="text-center font-mono text-xs text-[color:var(--cream)]/40 pt-2">
             347 Rue Duvernay · Beloeil QC · (450) 281-0625

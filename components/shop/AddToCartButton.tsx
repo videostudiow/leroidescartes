@@ -1,9 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { useCart } from "@/lib/cart-context";
 import { ShoppingBag, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useLocale } from "@/components/i18n/LocaleProvider";
+import { dictFor } from "@/lib/i18n/dictionaries";
 
 interface AddToCartButtonProps {
   merchandiseId: string;
@@ -23,6 +25,8 @@ export default function AddToCartButton({
   label,
 }: AddToCartButtonProps) {
   const { addItem } = useCart();
+  const locale = useLocale();
+  const dict = dictFor(locale);
   const [added, setAdded] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +36,7 @@ export default function AddToCartButton({
         href={`/produits/${productHandle}`}
         className={`btn-outline border-dark text-dark text-xs px-3 py-1.5 ${fullWidth ? "w-full justify-center" : ""} ${className}`}
       >
-        Choisir
+        {locale === "en" ? "Choose" : "Choisir"}
       </Link>
     );
   }
@@ -59,9 +63,9 @@ export default function AddToCartButton({
       {loading ? (
         <Loader2 size={14} className="animate-spin" />
       ) : added ? (
-        <><Check size={14} /> Ajouté</>
+        <><Check size={14} /> {dict.product.ajoute}</>
       ) : (
-        <><ShoppingBag size={14} /> {label ?? "Ajouter"}</>
+        <><ShoppingBag size={14} /> {label ?? dict.product.ajouter}</>
       )}
     </button>
   );
